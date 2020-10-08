@@ -49,7 +49,14 @@ export class AppComponent implements OnInit {
   }
 
   constructor(private dataService: DataScrapperService) {
-    this.dataService.getJSON().subscribe((data) => (this.countries = data));
+    this.dataService.getJSON().subscribe(
+      (data) =>
+        (this.countries = data
+          .map((el) => ({ ...el, name: el.name.trimLeft() }))
+          .sort((a, b) => {
+            return ('' + a.name).localeCompare(b.name);
+          }))
+    );
   }
 
   changeFirst(e): void {
@@ -65,12 +72,7 @@ export class AppComponent implements OnInit {
   }
 
   generatePeople(country, num: 'ctx1' | 'ctx2'): void {
-    this[num].clearRect(
-      0,
-      0,
-      this.CANVAS_SIZE,
-      this.CANVAS_SIZE
-    );
+    this[num].clearRect(0, 0, this.CANVAS_SIZE, this.CANVAS_SIZE);
 
     this.ctx1.fillStyle = '#FF0000';
     this.ctx2.fillStyle = '#FF0000';
