@@ -18,6 +18,10 @@ export class DataScrapperService {
     return this.http.get('./assets/data.json');
   }
 
+  public getCases(): Observable<any> {
+    return this.http.get('https://corona.lmao.ninja/v2/countries');
+  }
+
   // get() {
   //   const url =
   //     'https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population_density';

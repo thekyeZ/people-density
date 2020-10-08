@@ -27,6 +27,7 @@ interface Country {
 export class AppComponent implements OnInit {
   title = 'people-density';
   countries: Country[] = [{ name: '-', density: 0 }];
+  covidData: any[] = [];
   selectedCountries: Country[] = [];
 
   readonly CANVAS_SIZE = 500;
@@ -39,6 +40,16 @@ export class AppComponent implements OnInit {
 
   private ctx1: CanvasRenderingContext2D;
   private ctx2: CanvasRenderingContext2D;
+
+  private initialCountiesData = {
+    cases: '-',
+    deaths: '-'
+  };
+
+  countriesData = this.initialCountiesData;
+
+
+  // covidApi = 'https://corona.lmao.ninja/v2/countries';
 
   ngOnInit(): void {
     this.ctx1 = this.canvas1.nativeElement.getContext('2d');
@@ -57,18 +68,36 @@ export class AppComponent implements OnInit {
             return ('' + a.name).localeCompare(b.name);
           }))
     );
+
+    this.dataService.getCases().subscribe((data) => (this.covidData = data));
   }
 
   changeFirst(e): void {
     const country = this.countries.find((el) => el.name == e.target.value);
     this.selectedCountries[0] = country;
     this.generatePeople(country, 'ctx1');
+    // console.log(this.covidData[0], country);
+    this.setCountryCasesInfo(country, 0);
   }
 
   changeSecond(e): void {
     const country = this.countries.find((el) => el.name == e.target.value);
     this.selectedCountries[1] = country;
     this.generatePeople(country, 'ctx2');
+    this.setCountryCasesInfo(country, 1);
+  }
+
+  setCountryCasesInfo(country: Country, num: 0 | 1): void {
+    const found = this.covidData.find((covid) => {
+      return (
+        covid.country.toLowerCase().includes(country.name.toLowerCase()) ||
+        country.name.toLowerCase().includes(covid.country.toLowerCase())
+      );
+    });
+
+    console.log(found);
+
+    this.countriesData[num] = found ? found : this.initialCountiesData;
   }
 
   generatePeople(country, num: 'ctx1' | 'ctx2'): void {
