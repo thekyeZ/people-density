@@ -31,8 +31,6 @@
     }
 
     .country-wrapper {
-        // width: 500px;
-        // height: 500px;
         .country-select {
             padding: 10px;
             margin: 10px 0;
@@ -42,16 +40,7 @@
             width: 500px;
             height: 500px;
             border: 1px solid black;
-            // box-sizing: border-box;
-
             position: relative;
-
-            .human {
-                position: absolute;
-                height: 2px;
-                width: 2px;
-                background: red;
-            }
         }
     }
 }

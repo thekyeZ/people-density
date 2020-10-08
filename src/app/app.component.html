@@ -24,11 +24,9 @@
 
       <div class="country">
         <!-- People here -->
-        <div
-          class="human"
-          *ngFor="let h of (comparison | async).c1"
-          [ngStyle]="h"
-        ></div>
+
+        <canvas #canvas1 [width]="CANVAS_SIZE" [height]="CANVAS_SIZE"></canvas>
+
       </div>
     </div>
     <div class="country-wrapper">
@@ -48,11 +46,7 @@
 
       <div class="country">
         <!-- People here -->
-        <div
-          class="human"
-          *ngFor="let h of (comparison | async).c2"
-          [ngStyle]="h"
-        ></div>
+        <canvas #canvas2 [width]="CANVAS_SIZE" [height]="CANVAS_SIZE"></canvas>
       </div>
     </div>
   </div>

@@ -1,16 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { DataScrapperService } from './services/data-scrapper/data-scrapper.service';
 
 interface ComparisonData {
   c1: {
-    top: string,
-    left: string
+    top: string;
+    left: string;
   }[];
 
   c2: {
-    top: string,
-    left: string
+    top: string;
+    left: string;
   }[];
 }
 
@@ -19,53 +19,77 @@ interface Country {
   density: number;
 }
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'people-density';
   countries: Country[] = [{ name: '-', density: 0 }];
-  comparison: BehaviorSubject<ComparisonData> = new BehaviorSubject({c1: [], c2: []});
   selectedCountries: Country[] = [];
+
+  readonly CANVAS_SIZE = 500;
+
+  @ViewChild('canvas1', { static: true })
+  canvas1: ElementRef<HTMLCanvasElement>;
+
+  @ViewChild('canvas2', { static: true })
+  canvas2: ElementRef<HTMLCanvasElement>;
+
+  private ctx1: CanvasRenderingContext2D;
+  private ctx2: CanvasRenderingContext2D;
+
+  ngOnInit(): void {
+    this.ctx1 = this.canvas1.nativeElement.getContext('2d');
+    this.ctx1.fillStyle = '#FF0000';
+
+    this.ctx2 = this.canvas2.nativeElement.getContext('2d');
+    this.ctx2.fillStyle = '#FF0000';
+  }
 
   constructor(private dataService: DataScrapperService) {
     this.dataService.getJSON().subscribe((data) => (this.countries = data));
   }
-  
+
   changeFirst(e): void {
     const country = this.countries.find((el) => el.name == e.target.value);
     this.selectedCountries[0] = country;
-    this.generatePeople(country, 'c1');
+    this.generatePeople(country, 'ctx1');
   }
 
   changeSecond(e): void {
     const country = this.countries.find((el) => el.name == e.target.value);
     this.selectedCountries[1] = country;
-    this.generatePeople(country, 'c2');
+    this.generatePeople(country, 'ctx2');
   }
 
-  generatePeople(country, num: 'c1'| 'c2'): void {
-    const ppkm = Number(country.density);
-    console.log('ppkm', ppkm);
-    let humans = [];
+  generatePeople(country, num: 'ctx1' | 'ctx2'): void {
+    this[num].clearRect(
+      0,
+      0,
+      this.CANVAS_SIZE,
+      this.CANVAS_SIZE
+    );
 
+    this.ctx1.fillStyle = '#FF0000';
+    this.ctx2.fillStyle = '#FF0000';
+
+    const ppkm = Number(country.density);
     for (let i = 0; i < ppkm; i++) {
       const dot = {
-        top: Math.floor(Math.random() * 500).toString() + 'px',
-        left: Math.floor(Math.random() * 500).toString() + 'px'
+        top: Math.floor(Math.random() * this.CANVAS_SIZE),
+        left: Math.floor(Math.random() * this.CANVAS_SIZE),
       };
 
-      humans.push(dot);
+      // TODO: Oh god please refactor this
+      if (num === 'ctx1') {
+        this.ctx1.fillRect(dot.top, dot.left, 2, 2);
+      }
+
+      if (num === 'ctx2') {
+        this.ctx2.fillRect(dot.top, dot.left, 2, 2);
+      }
     }
-
-    const obj = {
-      c1: num === 'c1' ? humans : this.comparison.getValue().c1,
-      c2: num === 'c2' ? humans : this.comparison.getValue().c2
-    };
-
-    this.comparison.next(obj);
   }
 }
