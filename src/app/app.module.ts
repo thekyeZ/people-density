@@ -9,10 +9,12 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { CountryComponent } from './components/country/country.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CountryComponent
   ],
   imports: [
     BrowserModule,

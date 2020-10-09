@@ -1,0 +1,18 @@
+<div class="country-wrapper">
+  <div class="country-info" *ngIf="selectedCountry">
+    <h4>{{ selectedCountry.name }}</h4>
+    <h5>{{ selectedCountry.density }} osoby/km<sup>2</sup></h5>
+    <!-- <h5>Zarażeni: {{ countryData.cases }}</h5>
+    <h5>Wyszytkie zgony: {{ countryData.deaths }}</h5> -->
+  </div>
+
+  <select class="country-select one" (change)="change($event)">
+    <option *ngFor="let c of countries" [value]="c.name" [data-name]="c.name">
+      {{ c.name }}
+    </option>
+  </select>
+
+  <div class="country">
+    <canvas #canvas [width]="CANVAS_SIZE" [height]="CANVAS_SIZE"></canvas>
+  </div>
+</div>

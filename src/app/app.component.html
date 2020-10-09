@@ -6,53 +6,8 @@
   <h2>Wybierz kraje do porównania</h2>
 
   <div class="countries">
-    <div class="country-wrapper">
-      <div class="country-info" *ngIf="selectedCountries[0]">
-        <h4>{{ selectedCountries[0].name }}</h4>
-        <h5>{{ selectedCountries[0].density }} osoby/km<sup>2</sup></h5>
-        <h5>Zarażeni: {{countriesData[0].cases}} </h5>
-        <h5>Wyszytkie zgony: {{countriesData[0].deaths}} </h5>
-      </div>
-
-      <select class="country-select one" (change)="changeFirst($event)">
-        <option
-          *ngFor="let c of countries"
-          [value]="c.name"
-          [data-name]="c.name"
-        >
-          {{ c.name }}
-        </option>
-      </select>
-
-      <div class="country">
-        <!-- People here -->
-
-        <canvas #canvas1 [width]="CANVAS_SIZE" [height]="CANVAS_SIZE"></canvas>
-
-      </div>
-    </div>
-    <div class="country-wrapper">
-      <div class="country-info" *ngIf="selectedCountries[1]">
-        <h4>{{ selectedCountries[1].name }}</h4>
-        <h5>{{ selectedCountries[1].density }} osoby/km<sup>2</sup></h5>
-        <h5>Zarażeni: {{countriesData[1].cases}} </h5>
-        <h5>Wyszytkie zgony: {{countriesData[1].deaths}} </h5>
-      </div>
-      <select class="country-select two" (change)="changeSecond($event)">
-        <option
-          *ngFor="let c of countries"
-          [value]="c.name"
-          [data-name]="c.name"
-        >
-          {{ c.name }}
-        </option>
-      </select>
-
-      <div class="country">
-        <!-- People here -->
-        <canvas #canvas2 [width]="CANVAS_SIZE" [height]="CANVAS_SIZE"></canvas>
-      </div>
-    </div>
+    <app-country [countries]="countries" [covidData]="covidData"></app-country>
+    <app-country [countries]="countries" [covidData]="covidData"></app-country>
   </div>
 
   <div class="copy">
